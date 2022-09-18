@@ -118,7 +118,7 @@ const buttonEdit = () => {
 
   return (
     <div>
-        <h1>Funcionarios</h1>
+        <h1>Lista de carros</h1>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
