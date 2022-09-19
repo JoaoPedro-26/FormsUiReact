@@ -3,6 +3,7 @@ import { Button, Grid } from "@mui/material";
 import { Form, Formik } from "formik";
 import { object, string} from "yup";
 import TextfieldWrapper from "./FormUI/Text/text";
+import LoadingButton from '@mui/lab/LoadingButton';
 import { styled } from '@mui/material/styles';
 import api from "../api";
 
@@ -21,7 +22,10 @@ const EditDetailsCar = () => {
 
     };
 
+    const [loading, setLoading] = React.useState(false);
+
     function addCarro (edit) {
+        setLoading(true);
         api.put(`http://api-test.bhut.com.br:3000/api/cars/${edit._id}`, edit)
         .then((response) => {
             console.log(response.data);
@@ -106,15 +110,16 @@ const EditDetailsCar = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Button 
+                        <LoadingButton 
+                            loading={loading}
                             type="submit"
                             variant="contained"
-                            color="primary"
+                            color="secondary"
                             disabled={!isValid || !dirty}
-                            onClick={e => handleClickButton(e)}
+                            onClick={e => handleClickButton(!loading)}
                             >
                             Editar dados
-                        </Button>
+                        </LoadingButton>
                     </Grid>
                 </Grid>
 

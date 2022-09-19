@@ -4,6 +4,7 @@ import { Form, Formik } from "formik";
 import { object, string} from "yup";
 import TextfieldWrapper from "./FormUI/Text/text";
 import { styled } from '@mui/material/styles';
+import LoadingButton from '@mui/lab/LoadingButton';
 import api from "../api";
 
 const CssTextField = styled(TextfieldWrapper)({
@@ -26,7 +27,10 @@ const AddCar = () => {
 
     };
 
+    const [loading, setLoading] = React.useState(false);
+
     function addCarro (carro) {
+        setLoading(true);
         api.post("http://api-test.bhut.com.br:3000/api/cars", carro)
         .then((response) => {
             console.log(response.data);
@@ -111,15 +115,16 @@ const AddCar = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Button 
+                        <LoadingButton 
+                            loading={loading}
                             type="submit"
                             variant="contained"
-                            color="primary"
+                            color="secondary"
                             disabled={!isValid || !dirty}
-                            onClick={e => handleClickButton(e)}
+                            onClick={e => handleClickButton(!loading)}
                             >
                             Novo veículo
-                        </Button>
+                        </LoadingButton>
                     </Grid>
                 </Grid>
 

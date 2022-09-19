@@ -14,6 +14,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import { Grid, Container } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState, useEffect } from 'react';
 import api from '../api';
@@ -52,6 +53,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function CustomizedTables() {
 
+const [loading, setLoading] = React.useState(false);
 const [open, setOpen] = React.useState(false);
 const handleClose = () => setOpen(false);
 const [rows, setRows] = useState([]);
@@ -109,6 +111,7 @@ const buttonDelete = (rowDelete) => {
 const buttonCadastro = () => {
   localStorage.setItem("registryCar", JSON.stringify(rows));
   window.location.href='/addCar';
+  setLoading(true);
 };
 
 const buttonEdit = () => {
@@ -123,24 +126,24 @@ const buttonEdit = () => {
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>ID</StyledTableCell>
+            <StyledTableCell align="center">ID</StyledTableCell>
             <StyledTableCell align="right">Modelo</StyledTableCell>
             <StyledTableCell align="right">Marca</StyledTableCell>
             <StyledTableCell align="right">Preço</StyledTableCell>
             <StyledTableCell align="right">Ano</StyledTableCell>
-            <StyledTableCell align="right">Detalhes sobre o veículo</StyledTableCell>
+            <StyledTableCell align="center">Detalhes sobre o veículo</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {listCars?.map((cars, rowIndex) => (
             <StyledTableRow>
-              <StyledTableCell component="th" scope="row">{cars._id}</StyledTableCell>
+              <StyledTableCell align="center" component="th" scope="row">{cars._id}</StyledTableCell>
               <StyledTableCell align="right">{cars.title}</StyledTableCell>
               <StyledTableCell align="right">{cars.brand}</StyledTableCell>
               <StyledTableCell align="right">{cars.price}</StyledTableCell>
               <StyledTableCell align="right">{cars.age}</StyledTableCell>
-              <StyledTableCell align="right">
-                <Button style={{marginRight: '0.938rem'}} variant="outlined" startIcon={<EditIcon />} onClick={() => handleOpen(cars._id)}>
+              <StyledTableCell align="center">
+                <Button style={{marginRight: '0.938rem'}} variant="contained" startIcon={<EditIcon />} onClick={() => handleOpen(cars._id)}>
                     Detalhes
                 </Button> 
 
@@ -203,16 +206,25 @@ const buttonEdit = () => {
                     </Box>
                 </Modal>
 
-                <Button variant="outlined" startIcon={<DeleteIcon/>} onClick={() => buttonDelete(cars._id)}>
+                <LoadingButton variant="outlined" color="error" startIcon={<DeleteIcon/>} onClick={() => buttonDelete(cars._id)}>
                     Deletar
-                </Button>
+                </LoadingButton>
               </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
-    <Button style={{marginTop: '0.938rem'}} type="submit" variant="contained" color="primary" onClick={() => buttonCadastro()}>Cadastrar novo veículo</Button>
+
+    <LoadingButton style={{marginTop: '0.938rem'}} 
+        loading={loading} 
+        type="submit" 
+        variant="contained" 
+        color="secondary" 
+        onClick={() => buttonCadastro(!loading)}
+        >
+        Cadastrar novo veículo
+      </LoadingButton>
     </div>
   );
 }
